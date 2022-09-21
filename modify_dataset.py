@@ -24,8 +24,11 @@ def change_data(data):
     df = pd.DataFrame(query_dict).dropna()
     return df
 
-train_data = pd.read_json(f"{dataset_dir}/train_v2.1.json", lines=True)
-dev_data = pd.read_json(f"{dataset_dir}/dev_v2.1.json", lines=True)
+with open(f"{dataset_dir}/train_v2.1.json", 'r') as f:
+    train_data = json.load(f)
+
+with open(f"{dataset_dir}/dev_v2.1.json", 'r') as f:
+    dev_data = json.load(f)
 
 train_df = change_data(train_data)
 dev_df = change_data(dev_data)
