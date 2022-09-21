@@ -17,4 +17,6 @@ gunzip train_v2.1.json.gz
 #tar -xzvf triples.train.full.tar.gz
 #tar -xzvf queries.tar.gz
 #tar -xzvf collection.tar.gz
+cp *.json dataset/
+rm *.json
 rm *.gz
