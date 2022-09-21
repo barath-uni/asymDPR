@@ -22,6 +22,7 @@ def change_data(data):
         answer = answers.get(key, [])
         query_dict["query_id"].append(query_ids[key])
     df = pd.DataFrame(query_dict).dropna()
+    print(len(df.index))
     return df
 
 with open(f"{dataset_dir}/train_v2.1.json", 'r') as f:
