@@ -7,7 +7,7 @@ import numpy as np
 import os
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 
-dataset_dir = ""
+dataset_dir = "dataset"
 logging.basicConfig(level=logging.INFO)
 transformers_logger = logging.getLogger("transformers")
 transformers_logger.setLevel(logging.WARNING)
@@ -35,7 +35,7 @@ model_args.eval_batch_size = 100
 model_args.evaluate_during_training = True
 model_args.evaluate_during_training_verbose = True
 # model_args.evaluate_during_training_steps = 200
-
+model_args.include_title = False
 # Model tracking
 # model_args.wandb_project = "Dense retrieval with Simple Transformers"
 model_args.save_model_every_epoch = False
