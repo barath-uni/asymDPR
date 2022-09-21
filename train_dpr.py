@@ -7,63 +7,52 @@ import numpy as np
 import os
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 
+dataset_dir = ""
 logging.basicConfig(level=logging.INFO)
 transformers_logger = logging.getLogger("transformers")
 transformers_logger.setLevel(logging.WARNING)
 
 logging.info("Loading doc data...")
-# Load queries and collections/ confirm which folder to use
-doc_df = pd.read_csv('', sep='\t', header=None)
-doc_df.columns = []
+# Read the data from the CSV :TODO Run the modify_dataset.py before running this file
 
-# Can replace with HF dataset but not sure if that is okay, confirm :TODO
-dataset = {}
-for _type in ['train', 'dev']:
-    if not os.path.exists(f'./data/{_type}.dpr.cache'):
-        logging.info(f"Loading {_type} data...")
-        df = pd.read_csv(f'./data/queriescollection_{_type}.tsv', sep='\t', header=None, quoting=csv.QUOTE_NONE)
-        df.columns = ['']
-        df = df.drop(columns=[''])
-        data = []
-        for vo in df.to_dict('records'):
-            try:
-                data.append(dict(
-                    query_text = vo['text_a'],
-                    gold_passage = doc_df[doc_df['qid'] == int(vo['qid'])]['passage'].values[0]
-                ))
-            except:
-                continue
-        with open(f'./data/{_type}.dpr.cache', 'wb') as f:
-            np.save(f, data)
-    else:
-        logger.info("Loading cached data...")
-        with open(f'data/{_type}.dpr.cache', 'rb') as f:
-            data = list(np.load(f, allow_pickle=True))
-    logger.info(f"demo {_type} data: {str(data[-1])}")
-    logger.info(f"{_type} data size: {len(data)}")
-    dataset[_type] = pd.DataFrame(data)
+train_data = pd.read_csv(f"data/data_{dataset_dir}/train.tsv", sep="\t")
+eval_data = pd.read_csv(f"data/data_{dataset_dir}/dev.tsv", sep="\t")
+model_type = "custom"
+model_name = None
+context_name = "bert-base-uncased"
+question_name = "bert-base-uncased"
+model_args = RetrievalArgs()
 
-model_type = "dpr"
-context_encoder_name = "facebook/dpr-ctx_encoder-single-nq-base"
-question_encoder_name = "facebook/dpr-question_encoder-single-nq-base"
-train_args = {
-    'evaluate_during_training': False,
-    'evaluate_during_training_verbose': False,
-    'max_seq_length': 256,
-    'num_train_epochs': 10,
-    'train_batch_size': 32,
-    'use_multiprocessing': False,
-    'use_multiprocessing_for_evaluation': False,
-    'overwrite_output_dir': True,
-    'evaluate_during_training_steps': 500,
-    'include_title': False
-}
+# Training parameters
+model_args.num_train_epochs = 40
+model_args.train_batch_size = 40
+model_args.learning_rate = 1e-5
+model_args.max_seq_length = 256
+
+# Evaluation parameters
+model_args.retrieve_n_docs = 100
+model_args.eval_batch_size = 100
+model_args.evaluate_during_training = True
+model_args.evaluate_during_training_verbose = True
+# model_args.evaluate_during_training_steps = 200
+
+# Model tracking
+# model_args.wandb_project = "Dense retrieval with Simple Transformers"
+model_args.save_model_every_epoch = False
+model_args.save_eval_checkpoints = False
+model_args.save_steps = -1
+model_args.save_best_model = True
+model_args.overwrite_output_dir = True
+
 model = RetrievalModel(
-    model_type='dpr',
-    args=train_args,
-    context_encoder_name=context_encoder_name,
-    query_encoder_name=question_encoder_name,
+    model_type=model_type,
+    model_name=model_name,
+    context_encoder_name=context_name,
+    query_encoder_name=question_name,
+    args=model_args,
 )
 
-model.train_model(dataset['train'], output_dir = './output/dpr', 
-                  additional_eval_passages=doc_df['passage'].values.tolist())
+
+# Ideally this should also index, because according to doc the additional_eval_passages performs an indexing before testing.
+# But not sure since i cannot run the whole training locally
+model.train_model(train_data, eval_data=eval_data, output_dir = "output/dpr")
