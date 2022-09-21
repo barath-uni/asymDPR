@@ -14,4 +14,5 @@ module load 2021
 module load Anaconda3/2021.05
 
 cd $HOME/asymdpr/asymDPR
-conda env create -f setup_gpu.yml
+sh downloaddata.sh
+
