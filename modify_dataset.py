@@ -16,11 +16,11 @@ def change_data(data):
     passages = data["passages"]
     query_ids = data["query_id"]
     for key in questions:
-
-        query_dict["gold_passage"] = [passage["passage_text"] for passage in passages[key]]
-        query_dict["query_text"] = questions[key]
+        print(key)
+        query_dict["gold_passage"].append([passage["passage_text"] for passage in passages[key]][0])
+        query_dict["query_text"].append(questions[key])
         answer = answers.get(key, [])
-        query_dict["query_id"] = query_ids[key]
+        query_dict["query_id"].append(query_ids[key])
     df = pd.DataFrame(query_dict).dropna()
     return df
 
