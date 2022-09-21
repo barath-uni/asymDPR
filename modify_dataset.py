@@ -2,7 +2,7 @@ import json
 import pandas as pd
 from tqdm.auto import tqdm
 
-dataset_dir = ""
+dataset_dir = "dataset"
 
 def change_data(data):
     query_dict = {
