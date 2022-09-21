@@ -16,4 +16,4 @@ dependencies:
     - tabulate==0.8.9
     - tqdm==4.62.3
     - pillow==8.0.1
-    - simpletransformers==0.63.7
+    - simpletransformers==0.63.9
