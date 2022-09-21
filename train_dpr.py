@@ -55,4 +55,4 @@ model = RetrievalModel(
 
 # Ideally this should also index, because according to doc the additional_eval_passages performs an indexing before testing.
 # But not sure since i cannot run the whole training locally
-model.train_model(train_data, eval_data=eval_data, output_dir = "output/dpr")
+model.train_model(train_data, output_dir = "output/dpr")
