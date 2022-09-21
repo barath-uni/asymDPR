@@ -32,7 +32,7 @@ model_args.max_seq_length = 256
 # Evaluation parameters
 model_args.retrieve_n_docs = 100
 model_args.eval_batch_size = 100
-model_args.evaluate_during_training = True
+model_args.evaluate_during_training = False
 model_args.evaluate_during_training_verbose = True
 # model_args.evaluate_during_training_steps = 200
 model_args.include_title = False
