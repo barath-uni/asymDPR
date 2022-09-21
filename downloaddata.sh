@@ -20,3 +20,5 @@ gunzip train_v2.1.json.gz
 cp *.json dataset/
 rm *.json
 rm *.gz
+# Create new directories
+mkdir data/data_dataset
