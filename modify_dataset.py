@@ -1,4 +1,5 @@
 import json
+from os import sep
 import pandas as pd
 from tqdm.auto import tqdm
 
@@ -40,3 +41,19 @@ train_df.to_csv(f"data/data_{dataset_dir}/train.tsv", sep="\t", index=False)
 dev_df.to_csv(f"data/data_{dataset_dir}/dev.tsv", sep="\t", index=False)
 
 print("DONE CHANGING THE DATA for TRAIN & DEV")
+
+# Seeing how the train_data and dev_data size changes for only wellformedanswers
+
+def makewf(input,output):
+    df = pd.read_json(input)
+    df = df.drop('answers',1)
+    df = df.rename(columns={'wellFormedAnswers':'answers'})
+    df = df[df.answers != '[]']
+    print("well formed answers stats")
+    print(len(df.index))
+    return df
+
+train_df_wfa = makewf(f"{dataset_dir}/train_v2.1.json", "")
+train_df_wfa.to_csv(f"data/data_{dataset_dir}/train_waa.tsv", sep="\t", index=False)
+dev_df_wfa = makewf(f"{dataset_dir}/dev_v2.1.json", "")
+dev_df_wfa.to_csv(f"data/data_{dataset_dir}/dev_waa.tsv", sep="\t", index=False)
