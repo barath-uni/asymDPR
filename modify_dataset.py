@@ -47,8 +47,9 @@ print("DONE CHANGING THE DATA for TRAIN & DEV")
 def makewf(input,output):
     df = pd.read_json(input)
     df = df.drop('answers',1)
-    df = df.rename(columns={'wellFormedAnswers':'answers'})
+    df = df.rename(columns={'wellFormedAnswers':'gold_passage'})
     df = df[df.answers != '[]']
+    df = df.rename(columns={'query': 'query_text'})
     print("well formed answers stats")
     print(len(df.index))
     return df
