@@ -47,13 +47,17 @@ print("DONE CHANGING THE DATA for TRAIN & DEV")
 def makewf(input,output):
     df = pd.read_json(input)
     df = df.drop('answers',1)
+    df = df.drop('passages',1)
+    df = df.drop('query_type',1)
     df = df.rename(columns={'wellFormedAnswers':'gold_passage'})
     df = df[df.gold_passage != '[]']
+    df['gold_passage'] = df['gold_passage'].map(lambda x: x.strip(']['))
     df = df.rename(columns={'query': 'query_text'})
     # sample only 50% of the gold passage considering the computational constraints
     df = df.sample(frac=0.5)
     print("well formed answers stats")
     print(len(df.index))
+    print(df['gold_passage'])
     return df
 
 train_df_wfa = makewf(f"{dataset_dir}/train_v2.1.json", "")
