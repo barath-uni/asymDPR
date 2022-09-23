@@ -32,7 +32,7 @@ model_args.max_seq_length = 256
 # Evaluation parameters
 model_args.retrieve_n_docs = 100
 model_args.eval_batch_size = 100
-model_args.evaluate_during_training = False
+model_args.evaluate_during_training = True
 model_args.evaluate_during_training_verbose = True
 # model_args.evaluate_during_training_steps = 200
 model_args.include_title = False
@@ -55,4 +55,4 @@ model = RetrievalModel(
 
 # Ideally this should also index, because according to doc the additional_eval_passages performs an indexing before testing.
 # But not sure since i cannot run the whole training locally
-model.train_model(train_data, output_dir = "output/dpr")
+model.train_model(train_data, eval_data=eval_data, output_dir = "output/dpr")
