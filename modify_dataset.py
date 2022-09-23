@@ -51,7 +51,7 @@ def makewf(input,output):
     df = df.drop('query_type',1)
     df = df.rename(columns={'wellFormedAnswers':'gold_passage'})
     df = df[df.gold_passage != '[]']
-    df['gold_passage'] = df['gold_passage'].map(lambda x: x.strip(']['))
+    df['gold_passage'] = df['gold_passage'].map(lambda x: x[0])
     df = df.rename(columns={'query': 'query_text'})
     # sample only 50% of the gold passage considering the computational constraints
     df = df.sample(frac=0.5)
