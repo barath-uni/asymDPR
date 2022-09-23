@@ -34,11 +34,11 @@ with open(f"{dataset_dir}/train_v2.1.json", 'r') as f:
 with open(f"{dataset_dir}/dev_v2.1.json", 'r') as f:
     dev_data = json.load(f)
 
-train_df = change_data(train_data)
-dev_df = change_data(dev_data)
+#train_df = change_data(train_data)
+#dev_df = change_data(dev_data)
 # We will replace the tsvs depending on the n. This shouldn't be a problem
-train_df.to_csv(f"data/data_{dataset_dir}/train.tsv", sep="\t", index=False)
-dev_df.to_csv(f"data/data_{dataset_dir}/dev.tsv", sep="\t", index=False)
+#train_df.to_csv(f"data/data_{dataset_dir}/train.tsv", sep="\t", index=False)
+#dev_df.to_csv(f"data/data_{dataset_dir}/dev.tsv", sep="\t", index=False)
 
 print("DONE CHANGING THE DATA for TRAIN & DEV")
 
@@ -48,8 +48,10 @@ def makewf(input,output):
     df = pd.read_json(input)
     df = df.drop('answers',1)
     df = df.rename(columns={'wellFormedAnswers':'gold_passage'})
-    df = df[df.answers != '[]']
+    df = df[df.gold_passage != '[]']
     df = df.rename(columns={'query': 'query_text'})
+    # sample only 50% of the gold passage considering the computational constraints
+    df = df.sample(frac=0.5)
     print("well formed answers stats")
     print(len(df.index))
     return df

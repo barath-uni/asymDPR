@@ -15,8 +15,8 @@ transformers_logger.setLevel(logging.WARNING)
 logging.info("Loading doc data...")
 # Read the data from the CSV :TODO Run the modify_dataset.py before running this file
 
-train_data = pd.read_csv(f"data/data_{dataset_dir}/train.tsv", sep="\t")
-eval_data = pd.read_csv(f"data/data_{dataset_dir}/dev.tsv", sep="\t")
+train_data = pd.read_csv(f"data/data_{dataset_dir}/train_waa.tsv", sep="\t")
+eval_data = pd.read_csv(f"data/data_{dataset_dir}/dev_waa.tsv", sep="\t")
 model_type = "custom"
 model_name = None
 context_name = "bert-base-uncased"
