@@ -9,7 +9,8 @@ transformers_logger.setLevel(logging.WARNING)
 
 # Path to the trained model
 model_type = "custom"
-model_name = "outputs"
+# Generating index only for the DPR for now. Can switch later for other research questions
+model_name = "bert-base-uncased"
 
 # Path to the Wikipedia passage collection
 index_path = "indices/wiki_passages_to_build_index"
