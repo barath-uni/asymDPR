@@ -13,7 +13,7 @@ model_type = "custom"
 model_name = "bert-base-uncased"
 
 # Path to the Wikipedia passage collection
-index_path = "data/data_dataset/corpus_to_index"
+index_path = "data/data_dataset/corpus_to_index.tsv"
 
 model_args = RetrievalArgs()
 model_args.output_dir = f"output/{model_name}"
