@@ -61,11 +61,12 @@ def makewf(input,output):
     return df
 
 def generate_passage(dataframes):
-    df = df.concat(dataframes)
+    df = pd.concat(dataframes)
     df = df.drop('query_text',1)
     df = df.drop('query_text',1)
     df = df.rename(columns={'gold_passage':'passages', 'query_id':'corpus_id'})
-
+    return df
+    
 if os.path.exists(f"data/data_{dataset_dir}/train_waa.tsv"):
     train_df_wfa = pd.read_csv(f"data/data_{dataset_dir}/train_waa.tsv")
 else:
