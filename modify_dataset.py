@@ -1,4 +1,5 @@
 import json
+import os
 from os import sep
 import pandas as pd
 from tqdm.auto import tqdm
@@ -66,10 +67,17 @@ def generate_passage(dataframes):
     df = df.drop('query_text',1)
     df = df.rename(columns={'gold_passage':'passages', 'query_id':'corpus_id'})
 
-train_df_wfa = makewf(f"{dataset_dir}/train_v2.1.json", "")
-train_df_wfa.to_csv(f"data/data_{dataset_dir}/train_waa.tsv", sep="\t", index=False)
-dev_df_wfa = makewf(f"{dataset_dir}/dev_v2.1.json", "")
-dev_df_wfa.to_csv(f"data/data_{dataset_dir}/dev_waa.tsv", sep="\t", index=False)
+if os.path.exists(f"data/data_{dataset_dir}/train_waa.tsv"):
+    train_df_wfa = pd.read_csv(f"data/data_{dataset_dir}/train_waa.tsv")
+else:
+    train_df_wfa = makewf(f"{dataset_dir}/train_v2.1.json", "")
+    train_df_wfa.to_csv(f"data/data_{dataset_dir}/train_waa.tsv", sep="\t", index=False)
+
+if os.path.exists(f"data/data_{dataset_dir}/dev_waa.tsv"):
+    dev_df_wfa = pd.read_csv(f"data/data_{dataset_dir}/dev_waa.tsv")
+else:
+    dev_df_wfa = makewf(f"{dataset_dir}/dev_v2.1.json", "")
+    dev_df_wfa.to_csv(f"data/data_{dataset_dir}/dev_waa.tsv", sep="\t", index=False)
 
 # Changes to generate corpus for indexing
 train_dev_passages = generate_passage([dev_df_wfa, train_df_wfa])
