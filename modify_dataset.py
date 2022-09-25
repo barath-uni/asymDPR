@@ -58,7 +58,6 @@ def makewf(input,output):
     df = df.sample(frac=0.5)
     print("well formed answers stats")
     print(len(df.index))
-    print(df['gold_passage'])
     return df
 
 def generate_passage(dataframes):
