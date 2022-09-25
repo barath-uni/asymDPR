@@ -13,10 +13,10 @@ model_type = "custom"
 model_name = "bert-base-uncased"
 
 # Path to the Wikipedia passage collection
-index_path = "indices/wiki_passages_to_build_index"
+index_path = "data/data_dataset/corpus_to_index"
 
 model_args = RetrievalArgs()
-model_args.output_dir = model_name
+model_args.output_dir = f"output/{model_name}"
 
 # Loading the model automatically builds the index
 model = RetrievalModel(
