@@ -64,7 +64,7 @@ model_args.output_dir = f"output/{question_name}_new"
 model_args.overwrite_output_dir = False
 if args.query_model != "bert-base-uncased":
     # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
-    model_args.query_config['projection_dim'] = 768
+    model_args.query_config['hidden_size'] = 768
 model = RetrievalModel(
     model_type=model_type,
     model_name=model_name,
