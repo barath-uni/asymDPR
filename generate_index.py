@@ -38,4 +38,4 @@ model = RetrievalModel(
 
 # Testing retrieval quality
 docs, *_ = model.predict(["What is precision and recall?"])
-print(docs)
+logging.info(docs[0])
