@@ -13,8 +13,8 @@ from transformers import BertPreTrainedModel, AutoConfig, AutoModel
 import torch
 
 class ExtendedTransformer(BertPreTrainedModel):
-    def __init__(self, config):
-        super().__init__(config, model_name)
+    def __init__(self, config, model_name):
+        super().__init__(config)
         self.bert = AutoModel.from_pretrained(model_name)
         self.linear = torch.nn.Linear(self.config.hidden_size, 128, bias=False)
         self.post_init()
