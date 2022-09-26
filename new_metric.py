@@ -1,10 +1,8 @@
 import logging
 import numpy as np
-
+import string
 # Need  a metric calculation function for NDCG
 def calculate_ndcg(gold_passages, doc_texts):
-    logging.info(gold_passages.keys())
-    logging.info(doc_texts.keys())
     last_id = -1
     den_count = 0
     total_rel = 0
@@ -17,7 +15,7 @@ def calculate_ndcg(gold_passages, doc_texts):
             rel = 0
         else:
             id_count += 1
-        if gold_passages[id] == row:
+        if gold_passages[id].strip().lower().translate(str.maketrans("", "", string.punctuation)) == row:
             rel += 1 / np.log2(id_count + 1)
         last_id = id
 

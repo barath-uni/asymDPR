@@ -60,7 +60,8 @@ model_args.save_best_model = True
 # Local change to test the metric, will be removed
 model_args.best_model_dir = f"output/{question_name}_new/best_model"
 model_args.output_dir = f"output/{question_name}_new"
-model_args.overwrite_output_dir = True
+# We dont want to accidentally remove an already run model, so keeping it as False which should help adding a new output dir name
+model_args.overwrite_output_dir = False
 
 model = RetrievalModel(
     model_type=model_type,

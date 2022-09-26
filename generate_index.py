@@ -1,6 +1,7 @@
 import logging
 from pydoc import doc
 from unittest import result
+from new_metric import calculate_ndcg
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 import pandas as pd
 
@@ -30,12 +31,11 @@ model = RetrievalModel(
 )
 
 # Ideally we have to use an unseen data for evaluation (Possibly left out from eval.json to check the performance)
-# eval_data = pd.read_csv(f"data/data_dataset/dev_waa.tsv", sep="\t")
-# results, *_ = model.eval_model(
-#     eval_data,
-#     top_k_values=[1, 2, 3, 5, 10, 20, 100])
-# print(results)
-
+eval_data = pd.read_csv(f"data/data_dataset/dev_waa.tsv", sep="\t")
+results, *_ = model.eval_model(
+    eval_data,
+    top_k_values=[1, 2, 3, 5, 10, 20, 100], ndcg=calculate_ndcg)
+logging.info(results)
 # Testing retrieval quality
 docs, *_ = model.predict(["What is precision and recall?"])
 logging.info(docs[0])
