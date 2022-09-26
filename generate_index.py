@@ -1,6 +1,7 @@
 import logging
 from unittest import result
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
+import pandas as pd
 
 
 logging.basicConfig(level=logging.INFO)
