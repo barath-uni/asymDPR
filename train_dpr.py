@@ -62,7 +62,9 @@ model_args.best_model_dir = f"output/{question_name}_new/best_model"
 model_args.output_dir = f"output/{question_name}_new"
 # We dont want to accidentally remove an already run model, so keeping it as False which should help adding a new output dir name
 model_args.overwrite_output_dir = False
-
+if args.query_model != "bert-base-uncased":
+    # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
+    model_args.query_config['projection_dim'] = 768
 model = RetrievalModel(
     model_type=model_type,
     model_name=model_name,
@@ -73,5 +75,3 @@ model = RetrievalModel(
 
 # Including the metric that is needed, for now adding ndcg
 model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}_new", ndcg=calculate_ndcg)
-
-

@@ -1,6 +1,4 @@
 import logging
-from pydoc import doc
-from unittest import result
 from new_metric import calculate_ndcg
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 import pandas as pd
