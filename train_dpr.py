@@ -9,6 +9,16 @@ import os
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 import argparse
 from new_metric import calculate_ndcg
+from transformers import BertPreTrainedModel, AutoConfig, AutoModel
+import torch
+
+class ExtendedTransformer(BertPreTrainedModel):
+    def __init__(self, config):
+        super().__init__(config, model_name)
+        self.bert = AutoModel.from_pretrained(model_name)
+        self.linear = torch.nn.Linear(self.config.hidden_size, 128, bias=False)
+        self.post_init()
+
 
 # Some parameters to train withput changing the script everytime
 parser = argparse.ArgumentParser()
@@ -63,8 +73,11 @@ model_args.output_dir = f"output/{question_name}_new"
 # We dont want to accidentally remove an already run model, so keeping it as False which should help adding a new output dir name
 model_args.overwrite_output_dir = False
 if args.query_model != "bert-base-uncased":
+    config = AutoConfig.from_pretrained(question_name)
+    question_name = ExtendedTransformer(config, question_name)
+    logging.info(question_name)
     # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
-    model_args.query_config['num_labels'] = 768
+
 model = RetrievalModel(
     model_type=model_type,
     model_name=model_name,
