@@ -8,6 +8,7 @@ import numpy as np
 import os
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 import argparse
+from new_metric import calculate_ndcg
 
 # Some parameters to train withput changing the script everytime
 parser = argparse.ArgumentParser()
@@ -38,7 +39,7 @@ question_name = args.query_model
 model_args = RetrievalArgs()
 
 # Training parameters
-model_args.num_train_epochs = 35
+model_args.num_train_epochs = 40
 model_args.train_batch_size = 40
 model_args.learning_rate = 1e-5
 model_args.max_seq_length = 256
@@ -56,8 +57,9 @@ model_args.save_model_every_epoch = False
 model_args.save_eval_checkpoints = False
 model_args.save_steps = -1
 model_args.save_best_model = True
-model_args.best_model_dir = f"output/{question_name}/best_model"
-model_args.output_dir = f"output/{question_name}"
+# Local change to test the metric, will be removed
+model_args.best_model_dir = f"output/{question_name}_new/best_model"
+model_args.output_dir = f"output/{question_name}_new"
 model_args.overwrite_output_dir = True
 
 model = RetrievalModel(
@@ -68,5 +70,7 @@ model = RetrievalModel(
     args=model_args,
 )
 
+# Including the metric that is needed, for now adding ndcg
+model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}_new", ndcg=calculate_ndcg)
 
-model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}")
+
