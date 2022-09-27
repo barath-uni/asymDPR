@@ -78,6 +78,7 @@ if args.query_model != "bert-base-uncased":
         # Have to manually store the tokenizer so simpletransformers can pick this up
         tokenizer = AutoTokenizer.from_pretrained(question_name)
         new_model = ExtendedTransformer(config, question_name)
+        logging.info(new_model.config.to_json())
         new_model.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
         tokenizer.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
         # Additionally have to change the config.name_or_path variable
