@@ -15,6 +15,8 @@ def calculate_ndcg(gold_passages, doc_texts):
             rel = 0
         else:
             id_count += 1
+        logging.info(gold_passages[id])
+        logging.info(row)
         if gold_passages[id].strip().lower().translate(str.maketrans("", "", string.punctuation)) == row.strip().lower().translate(str.maketrans("", "", string.punctuation)):
             rel += 1 / np.log2(id_count + 1)
         last_id = id
