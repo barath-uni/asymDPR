@@ -80,6 +80,8 @@ if args.query_model != "bert-base-uncased":
         new_model = ExtendedTransformer(config, question_name)
         new_model.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
         tokenizer.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
+        # Additionally have to change the config.name_or_path variable
+        config.name_or_path = f"output/{question_name}_ExtendedModel"
         config.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
         logging.info(question_name)
     # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
