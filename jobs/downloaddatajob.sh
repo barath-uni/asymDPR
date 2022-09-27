@@ -7,7 +7,7 @@
 #SBATCH --cpus-per-task=3
 #SBATCH --time=1:00:00
 #SBATCH --mem=32000M
-#SBATCH --output=setupproj.out
+#SBATCH --output=downloaddatajob.out
 
 module purge
 module load 2021

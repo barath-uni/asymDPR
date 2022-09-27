@@ -8,12 +8,14 @@ import numpy as np
 import os
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 import argparse
-from new_metric import calculate_ndcg
-from transformers import BertPreTrainedModel, AutoConfig, AutoModel, AutoTokenizer
+from new_metric import calculate_ndcg, calculate_recall_100
+from transformers import BertPreTrainedModel, AutoConfig, AutoModel, AutoTokenizer, PretrainedConfig
 import torch
 
 class ExtendedTransformer(BertPreTrainedModel):
+    
     def __init__(self, config, model_name):
+        self.model_type = model_name
         super().__init__(config)
         self.bert = AutoModel.from_pretrained(model_name)
         self.linear = torch.nn.Linear(self.config.hidden_size, 768, bias=False)
@@ -97,4 +99,4 @@ model = RetrievalModel(
 )
 
 # Including the metric that is needed, for now adding ndcg
-model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}_new", ndcg=calculate_ndcg)
+model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}_new", ndcg=calculate_ndcg, recall_100=calculate_recall_100)
