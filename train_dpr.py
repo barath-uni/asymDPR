@@ -9,7 +9,7 @@ import os
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 import argparse
 from new_metric import calculate_ndcg
-from transformers import BertPreTrainedModel, AutoConfig, AutoModel
+from transformers import BertPreTrainedModel, AutoConfig, AutoModel, AutoTokenizer
 import torch
 
 class ExtendedTransformer(BertPreTrainedModel):
@@ -75,8 +75,12 @@ model_args.overwrite_output_dir = True
 if args.query_model != "bert-base-uncased":
     if not os.path.exists("output/{question_name}_ExtendedModel"):
         config = AutoConfig.from_pretrained(question_name)
+        # Have to manually store the tokenizer so simpletransformers can pick this up
+        tokenizer = AutoTokenizer.from_pretrained(question_name)
         new_model = ExtendedTransformer(config, question_name)
         new_model.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
+        tokenizer.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
+        config.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
         logging.info(question_name)
     # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
     question_name = f"output/{question_name}_ExtendedModel"
