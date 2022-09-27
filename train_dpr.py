@@ -16,7 +16,7 @@ class ExtendedTransformer(BertPreTrainedModel):
     def __init__(self, config, model_name):
         super().__init__(config)
         self.bert = AutoModel.from_pretrained(model_name)
-        self.linear = torch.nn.Linear(self.config.hidden_size, 128, bias=False)
+        self.linear = torch.nn.Linear(self.config.hidden_size, 768, bias=False)
         self.post_init()
 
 
@@ -71,13 +71,16 @@ model_args.save_best_model = True
 model_args.best_model_dir = f"output/{question_name}_new/best_model"
 model_args.output_dir = f"output/{question_name}_new"
 # We dont want to accidentally remove an already run model, so keeping it as False which should help adding a new output dir name
-model_args.overwrite_output_dir = False
+model_args.overwrite_output_dir = True
 if args.query_model != "bert-base-uncased":
-    config = AutoConfig.from_pretrained(question_name)
-    question_name = ExtendedTransformer(config, question_name)
-    logging.info(question_name)
+    if not os.path.exists("output/{question_name}_ExtendedModel"):
+        config = AutoConfig.from_pretrained(question_name)
+        new_model = ExtendedTransformer(config, question_name)
+        new_model.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
+        logging.info(question_name)
     # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
-
+    question_name = f"output/{question_name}_ExtendedModel"
+logging.info(f"Loading the model from {question_name}")
 model = RetrievalModel(
     model_type=model_type,
     model_name=model_name,
