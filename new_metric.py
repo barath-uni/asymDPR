@@ -15,14 +15,16 @@ def calculate_ndcg(gold_passages, doc_texts):
             ):
                 relevance_list[i, j] = 1
                 break
+    logging.info(relevance_list.size())
     logging.info(relevance_list)
     return 0.0
     # logging.info("NDCG METRIC", total_rel/den_count)
     # return total_rel/den_count
 
 def calculate_recall_100(gold_passages, doc_texts):
-    act_set = set(gold_passages)
-    # Hardcoding K for Recall@100
-    pred_set = set(doc_texts[:100])
-    result = len(act_set.intersection(pred_set))/float(len(act_set))
-    return result
+    # act_set = set(gold_passages)
+    # # Hardcoding K for Recall@100
+    # pred_set = set(doc_texts[:100])
+    # result = len(act_set.intersection(pred_set))/float(len(act_set))
+    # return result
+    return 0.0

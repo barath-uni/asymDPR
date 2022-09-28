@@ -17,8 +17,9 @@ gunzip train_v2.1.json.gz
 #tar -xzvf triples.train.full.tar.gz
 #tar -xzvf queries.tar.gz
 #tar -xzvf collection.tar.gz
-cp *.json dataset/
-rm *.json
+mkdir dataset
+cp -r *.json dataset/
+# rm *.json
 rm *.gz
 # Create new directories
 mkdir data/data_dataset
