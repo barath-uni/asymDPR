@@ -1659,7 +1659,8 @@ class RetrievalModel:
             query_outputs = query_model(**query_inputs).pooler_output
         except Exception as e:
             if 'pooler_output' in str(e):
-                query_outputs = BertPooler(query_model(**query_inputs))
+                pooler_layer = BertPooler(self.args.query_config)
+                query_outputs = pooler_layer(query_model(**query_inputs))
         context_outputs = torch.nn.functional.dropout(context_outputs, p=0.1)
         query_outputs = torch.nn.functional.dropout(query_outputs, p=0.1)
 
