@@ -22,7 +22,7 @@ def calculate_ndcg(gold_passages, doc_texts):
                 relevance_list[i, j] = 1
                 break
     logging.info("RELEVANCE SCORE")
-    logging.info(relevance_list.size())
+    logging.info(relevance_list)
     logging.info("Y TRUTH")
     logging.info(y_truth)
     return ndcg_score(y_truth, relevance_list)
