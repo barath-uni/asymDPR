@@ -79,7 +79,20 @@ MODEL_CLASSES = {
         AutoTokenizer,
     ),
 }
+# Manually adding the BERTPooler layer if there is no pooled_output present
+class BertPooler(torch.nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.dense = torch.nn.Linear(config.hidden_size, config.hidden_size)
+        self.activation = torch.nn.Tanh()
 
+    def forward(self, hidden_states):
+        # We "pool" the model by simply taking the hidden state corresponding
+        # to the first token.
+        first_token_tensor = hidden_states[:, 0]
+        pooled_output = self.dense(first_token_tensor)
+        pooled_output = self.activation(pooled_output)
+        return pooled_output
 
 class RetrievalModel:
     def __init__(
@@ -1642,8 +1655,11 @@ class RetrievalModel:
         criterion,
     ):
         context_outputs = context_model(**context_inputs).pooler_output
-        query_outputs = query_model(**query_inputs).pooler_output
-
+        try:
+            query_outputs = query_model(**query_inputs).pooler_output
+        except Exception as e:
+            if 'pooler_output' in str(e):
+                query_outputs = BertPooler(query_model(**query_inputs))
         context_outputs = torch.nn.functional.dropout(context_outputs, p=0.1)
         query_outputs = torch.nn.functional.dropout(query_outputs, p=0.1)
 
