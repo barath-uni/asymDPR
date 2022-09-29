@@ -89,8 +89,6 @@ class BertPooler(torch.nn.Module):
     def forward(self, hidden_states):
         # We "pool" the model by simply taking the hidden state corresponding
         # to the first token.
-        logging.info("HIDDEN STATES")
-        logging.info(hidden_states.last_hidden_state)
         hidden_states = hidden_states.last_hidden_state
         first_token_tensor = hidden_states[:, 0]
         pooled_output = self.dense(first_token_tensor)
@@ -1658,12 +1656,13 @@ class RetrievalModel:
         criterion,
     ):
         context_outputs = context_model(**context_inputs).pooler_output
+        query_res = query_model(**query_inputs)
         try:
-            query_outputs = query_model(**query_inputs).pooler_output
+            query_outputs = query_res.pooler_output
         except Exception as e:
             if 'pooler_output' in str(e):
                 pooler_layer = BertPooler()
-                query_outputs = pooler_layer(query_model(**query_inputs))
+                query_outputs = pooler_layer(query_res)
         context_outputs = torch.nn.functional.dropout(context_outputs, p=0.1)
         query_outputs = torch.nn.functional.dropout(query_outputs, p=0.1)
 
