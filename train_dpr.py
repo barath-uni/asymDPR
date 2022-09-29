@@ -74,7 +74,7 @@ model_args.best_model_dir = f"output/{question_name}_new/best_model"
 model_args.output_dir = f"output/{question_name}_new"
 # We dont want to accidentally remove an already run model, so keeping it as False which should help adding a new output dir name
 model_args.overwrite_output_dir = True
-if args.query_model != "bert-base-uncased":
+if args.query_model != "bert-base-uncased" or args.query_model != "distilbert-base-uncased":
     if not os.path.exists("output/{question_name}_ExtendedModel"):
         config = AutoConfig.from_pretrained(question_name)
         # Have to manually store the tokenizer so simpletransformers can pick this up
