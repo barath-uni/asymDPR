@@ -81,9 +81,9 @@ MODEL_CLASSES = {
 }
 # Manually adding the BERTPooler layer if there is no pooled_output present
 class BertPooler(torch.nn.Module):
-    def __init__(self, config):
+    def __init__(self):
         super().__init__()
-        self.dense = torch.nn.Linear(config.hidden_size, config.hidden_size)
+        self.dense = torch.nn.Linear(768, 768)
         self.activation = torch.nn.Tanh()
 
     def forward(self, hidden_states):
@@ -1659,7 +1659,7 @@ class RetrievalModel:
             query_outputs = query_model(**query_inputs).pooler_output
         except Exception as e:
             if 'pooler_output' in str(e):
-                pooler_layer = BertPooler(self.args.query_config)
+                pooler_layer = BertPooler()
                 query_outputs = pooler_layer(query_model(**query_inputs))
         context_outputs = torch.nn.functional.dropout(context_outputs, p=0.1)
         query_outputs = torch.nn.functional.dropout(query_outputs, p=0.1)
