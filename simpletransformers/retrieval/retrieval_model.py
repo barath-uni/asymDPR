@@ -83,7 +83,7 @@ MODEL_CLASSES = {
 class BertPooler(torch.nn.Module):
     def __init__(self):
         super().__init__()
-        self.dense = torch.nn.Linear(768, 768)
+        self.dense = torch.nn.Linear(768, 768, device=torch.device("cuda"))
         self.activation = torch.nn.Tanh()
 
     def forward(self, hidden_states):
