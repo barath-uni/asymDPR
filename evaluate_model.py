@@ -50,6 +50,7 @@ model = RetrievalModel(
     context_encoder_name=context_name,
     query_encoder_name="bert-base-uncased",
     args=model_args,
+    query_static_embeddings=True
 )
 
 model.eval_model(eval_data, top_k_values=[1, 2, 3, 5, 10, 20, 100], output_dir = f"output/bert-base-uncased_static", ndcg=calculate_ndcg, recall_100=calculate_recall_100)
