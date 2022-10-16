@@ -247,7 +247,9 @@ class RetrievalModel:
         # TODO: Add support for adding special tokens to the tokenizers
         # MAJOR: Changing the model and its config after it gets loaded
         if query_static_embeddings:
-            layer_list = self.query_encoder.bert.encoder.layer
+            layer_list = self.query_encoder.encoder.layer
+            print("LAYER LIST")
+            print(layer_list)
             # Remove all the 12 layers for BERT-base-uncased
             layer_indexes = range(1,13)
             layer_indexes.sort(reverse=True)
@@ -256,9 +258,9 @@ class RetrievalModel:
                     print ("Only positive indices allowed")
                     sys.exit(1)
                 # Deleting the query encoder bert layer based on the index
-                del(self.query_encoder.bert.encoder.layer[layer_idx])
+                del(self.query_encoder.encoder.layer[layer_idx])
                 print ("Removed Layer: ", layer_idx)
-            self.query_encoder.config.num_hidden_layers=len(self.query_encoder.bert.encoder.layer)
+            self.query_encoder.config.num_hidden_layers=len(self.query_encoder.encoder.layer)
         self.args.model_type = model_type
         self.args.model_name = model_name
 
