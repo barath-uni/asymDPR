@@ -108,6 +108,7 @@ class RetrievalModel:
         args=None,
         use_cuda=True,
         cuda_device=-1,
+        query_static_embeddings=False,
         **kwargs,
     ):
         """
@@ -124,6 +125,7 @@ class RetrievalModel:
             args (dict or RetrievalArgs, optional):  Default args will be used if this parameter is not provided. If provided, it should be a dict containing the args that should be changed in the default args or an instance of RetrievalArgs.
             use_cuda (bool, optional): Use GPU if available. Setting to False will force model to use CPU only.. Defaults to True.
             cuda_device (int, optional): Specific GPU that should be used. Will use the first available GPU by default. Defaults to -1.
+            query_static_embeddings(bool, optional): Strips the model and uses only the embedding layers only.
             **kwargs (optional): For providing proxies, force_download, resume_download, cache_dir and other options specific to the 'from_pretrained' implementation where this will be supplied.
 
         Raises:
@@ -243,7 +245,20 @@ class RetrievalModel:
             )
 
         # TODO: Add support for adding special tokens to the tokenizers
-
+        # MAJOR: Changing the model and its config after it gets loaded
+        if query_static_embeddings:
+            layer_list = self.query_encoder.bert.encoder.layer
+            # Remove all the 12 layers for BERT-base-uncased
+            layer_indexes = range(1,13)
+            layer_indexes.sort(reverse=True)
+            for layer_idx in layer_indexes:
+                if layer_idx < 0:
+                    print ("Only positive indices allowed")
+                    sys.exit(1)
+                # Deleting the query encoder bert layer based on the index
+                del(self.query_encoder.bert.encoder.layer[layer_idx])
+                print ("Removed Layer: ", layer_idx)
+            self.query_encoder.config.num_hidden_layers=len(self.query_encoder.bert.encoder.layer)
         self.args.model_type = model_type
         self.args.model_name = model_name
 

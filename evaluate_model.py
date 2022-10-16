@@ -5,6 +5,7 @@ import csv
 import logging
 import numpy as np
 import os
+from new_metric import calculate_ndcg, calculate_recall_100
 from simpletransformers.retrieval import RetrievalModel, RetrievalArgs
 
 dataset_dir = "dataset"
@@ -41,11 +42,14 @@ model_args.save_eval_checkpoints = False
 model_args.save_steps = -1
 model_args.save_best_model = True
 model_args.overwrite_output_dir = True
+context_name = "bert-base-uncased"
 
 model = RetrievalModel(
     model_type=model_type,
     model_name=model_name,
     context_encoder_name=context_name,
-    query_encoder_name=question_name,
+    query_encoder_name="bert-base-uncased",
     args=model_args,
 )
+
+model.eval_model(eval_data, top_k_values=[1, 2, 3, 5, 10, 20, 100], output_dir = f"output/bert-base-uncased_static", ndcg=calculate_ndcg, recall_100=calculate_recall_100)
