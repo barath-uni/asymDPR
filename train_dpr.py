@@ -51,7 +51,7 @@ question_name = args.query_model
 model_args = RetrievalArgs()
 
 # Training parameters
-model_args.num_train_epochs = 1
+model_args.num_train_epochs = 40
 model_args.train_batch_size = 40
 model_args.learning_rate = 1e-5
 model_args.max_seq_length = 256
