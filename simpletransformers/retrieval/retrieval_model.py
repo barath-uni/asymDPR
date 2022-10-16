@@ -251,8 +251,8 @@ class RetrievalModel:
             print("LAYER LIST")
             print(layer_list)
             # Remove all the 12 layers for BERT-base-uncased
-            for outer_lay in range(2):
-                for layer_idx in range(6):
+            for outer_lay in range(3):
+                for layer_idx in range(5-outer_lay):
                     if layer_idx < 0:
                         print ("Only positive indices allowed")
                         os.sys.exit(1)
