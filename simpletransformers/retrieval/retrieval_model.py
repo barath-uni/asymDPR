@@ -251,15 +251,16 @@ class RetrievalModel:
             print("LAYER LIST")
             print(layer_list)
             # Remove all the 12 layers for BERT-base-uncased
-            for layer_idx in range(12):
-                if layer_idx < 0:
-                    print ("Only positive indices allowed")
-                    os.sys.exit(1)
-                # Deleting the query encoder bert layer based on the index
-                del(self.query_encoder.encoder.layer[layer_idx])
-                print ("Removed Layer: ", layer_idx)
-                print("Remaining layers")
-                print(len(self.query_encoder.encoder.layer))
+            for outer_lay in range(2):
+                for layer_idx in range(6):
+                    if layer_idx < 0:
+                        print ("Only positive indices allowed")
+                        os.sys.exit(1)
+                    # Deleting the query encoder bert layer based on the index
+                    del(self.query_encoder.encoder.layer[layer_idx])
+                    print("Removed Layer: ", layer_idx)
+                    print("Remaining layers: ")
+                    print(len(self.query_encoder.encoder.layer))
             self.query_encoder.config.num_hidden_layers=len(self.query_encoder.encoder.layer)
         self.args.model_type = model_type
         self.args.model_name = model_name
