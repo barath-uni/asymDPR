@@ -250,6 +250,7 @@ class RetrievalModel:
             layer_list = self.query_encoder.encoder.layer
             print("LAYER LIST")
             print(layer_list)
+            print(len(self.query_encoder.encoder.layer))
             # Remove all the 12 layers for BERT-base-uncased
             for layer_idx in range(12):
                 if layer_idx < 0:
