@@ -1392,17 +1392,12 @@ class RetrievalModel:
 
         if passages_only:
             passages = []
-            for i, query_embeddings in enumerate(
-                tqdm(
-                    query_embeddings_batched,
-                    desc="Retrieving docs",
-                    disable=args.silent,
-                )
-            ):
+            for i, query_embeddings in enumerate(query_embeddings_batched):
+                print("BEFORE")
                 _, _, doc_dicts_batch = passage_dataset.get_top_docs(
                     query_embeddings.astype(np.float32), retrieve_n_docs
                 )
-
+                print("AFTER")
                 passages.extend([d["passages"] for d in doc_dicts_batch])
                 print("PASSAGES present")
                 print(len(passages))
