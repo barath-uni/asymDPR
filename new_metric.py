@@ -31,9 +31,10 @@ def calculate_recall_100(gold_passages, doc_texts):
     act_set = set(gold_passages)
     # Hardcoding K for Recall@100
     logging.info("DOC TEXTS AT 100")
-    logging.info([doc_texts[:,:100]])
-    pred_set = set(doc_texts[:,:100])
-    # logging.info(pred_set)
-    result = len(act_set.intersection(pred_set))/float(len(act_set))
-    return result
-    # return 0.0
+    logging.info(doc_texts)
+    # logging.info([doc_texts[:,:100]])
+    # pred_set = set(doc_texts[:,:100])
+    # # logging.info(pred_set)
+    # result = len(act_set.intersection(pred_set))/float(len(act_set))
+    # return result
+    return 0.0
