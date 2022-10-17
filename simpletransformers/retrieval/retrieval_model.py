@@ -1346,6 +1346,12 @@ class RetrievalModel:
                         relevance_list[i, j] = 1
                         break
                 else:
+                    print("DOC VALUE")
+                    print(d.strip().lower().translate(
+                        str.maketrans("", "", string.punctuation)))
+                    print("TRUTH VALUE")
+                    print(truth.strip().lower().translate(
+                        str.maketrans("", "", string.punctuation)))
                     if d.strip().lower().translate(
                         str.maketrans("", "", string.punctuation)
                     ) == truth.strip().lower().translate(
