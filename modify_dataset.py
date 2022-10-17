@@ -64,7 +64,6 @@ def generate_passage(dataframes):
     df = pd.concat(dataframes)
     df = df.drop('query_text',1)
     df = df.drop('query_id',1)
-    df = df.drop('corpus_id',1)
     df = df.rename(columns={'gold_passage':'passages'})
     return df
 
@@ -82,4 +81,4 @@ else:
 
 # Changes to generate corpus for indexing
 train_dev_passages = generate_passage([dev_df_wfa, train_df_wfa])
-train_dev_passages.to_csv(f"data/data_{dataset_dir}/corpus_to_index.tsv", index=False)
+train_dev_passages.to_csv(f"data/data_{dataset_dir}/corpus_to_index.tsv", sep="\t", index=False)
