@@ -40,5 +40,6 @@ model = RetrievalModel(
 eval_data = pd.read_csv(f"data/data_dataset/dev_waa.tsv", sep="\t")
 
 
-results, *_ = model.eval_model(eval_data, top_k_values=[1, 2, 3, 5, 10, 20, 100], output_dir = f"output/bert-base-uncased_static", ndcg=calculate_ndcg, recall_100=calculate_recall_100)
-logging.info(results)
+# results, *_ = model.eval_model(eval_data, top_k_values=[1, 2, 3, 5, 10, 20, 100], output_dir = f"output/bert-base-uncased_static", ndcg=calculate_ndcg, recall_100=calculate_recall_100)
+docs, *_ = model.predict(["What is precision and recall?"])
+logging.info(docs)
