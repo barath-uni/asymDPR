@@ -1404,7 +1404,8 @@ class RetrievalModel:
                 )
 
                 passages.extend([d["passages"] for d in doc_dicts_batch])
-
+                print("PASSAGES present")
+                print(len(passages))
             return passages
         else:
             ids_batched = np.zeros((len(query_embeddings), retrieve_n_docs))
