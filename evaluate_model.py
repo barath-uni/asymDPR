@@ -33,7 +33,7 @@ model = RetrievalModel(
     model_name=model_name,
     args=model_args,
     prediction_passages=index_path,
-    # query_static_embeddings=True
+    query_static_embeddings=True
 )
 
 # Ideally we have to use an unseen data for evaluation (Possibly left out from eval.json to check the performance)
