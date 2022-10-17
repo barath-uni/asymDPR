@@ -100,4 +100,3 @@ model = RetrievalModel(
 
 # Including the metric that is needed, for now adding ndcg
 model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}_new", ndcg=calculate_ndcg, recall_100=calculate_recall_100)
-model.eva

@@ -1353,7 +1353,10 @@ class RetrievalModel:
                     ):
                         relevance_list[i, j] = 1
                         break
-
+        
+        print("RELAVANCE LIST")
+        print(relevance_list)
+        print(np.sum(relevance_list[:, :10]))
         mrr = {
             f"mrr@{k}": mean_reciprocal_rank_at_k(relevance_list, k)
             for k in top_k_values

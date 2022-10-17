@@ -665,6 +665,8 @@ def mean_reciprocal_rank_at_k(rs, k):
     Returns:
         Mean reciprocal rank
     """
+    logging.info("RS")
+    logging.info(rs)
     rs = rs[:, :k]
     rs = (np.asarray(r).nonzero()[0] for r in rs)
     return np.mean([1.0 / (r[0] + 1) if r.size else 0.0 for r in rs])
