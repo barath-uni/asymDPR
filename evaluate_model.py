@@ -23,14 +23,15 @@ model_name = ""
 model_args = RetrievalArgs()
 
 # Training parameters
-model_args.num_train_epochs = 40
+model_args.num_train_epochs = 1
 model_args.train_batch_size = 40
 model_args.learning_rate = 1e-5
 model_args.max_seq_length = 256
 
 # Evaluation parameters
 model_args.retrieve_n_docs = 100
-model_args.eval_batch_size = 100
+model_args.eval_batch_size = 40
+model_args.retrieval_batch_size = 40
 model_args.evaluate_during_training = False
 model_args.evaluate_during_training_verbose = True
 # model_args.evaluate_during_training_steps = 200
