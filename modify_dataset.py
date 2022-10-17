@@ -64,17 +64,18 @@ def generate_passage(dataframes):
     df = pd.concat(dataframes)
     df = df.drop('query_text',1)
     df = df.drop('query_id',1)
+    df = df.drop('corpus_id',1)
     df = df.rename(columns={'gold_passage':'passages'})
     return df
 
 if os.path.exists(f"data/data_{dataset_dir}/train_waa.tsv"):
-    train_df_wfa = pd.read_csv(f"data/data_{dataset_dir}/train_waa.tsv")
+    train_df_wfa = pd.read_csv(f"data/data_{dataset_dir}/train_waa.tsv", sep='\t')
 else:
     train_df_wfa = makewf(f"{dataset_dir}/train_v2.1.json", "")
     train_df_wfa.to_csv(f"data/data_{dataset_dir}/train_waa.tsv", sep="\t", index=False)
 
 if os.path.exists(f"data/data_{dataset_dir}/dev_waa.tsv"):
-    dev_df_wfa = pd.read_csv(f"data/data_{dataset_dir}/dev_waa.tsv")
+    dev_df_wfa = pd.read_csv(f"data/data_{dataset_dir}/dev_waa.tsv", sep='\t')
 else:
     dev_df_wfa = makewf(f"{dataset_dir}/dev_v2.1.json", "")
     dev_df_wfa.to_csv(f"data/data_{dataset_dir}/dev_waa.tsv", sep="\t", index=False)
