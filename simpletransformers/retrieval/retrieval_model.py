@@ -259,10 +259,12 @@ class RetrievalModel:
                 del(self.query_encoder.encoder.layer[0])
                 print("Removed Layer: ", layer_idx)
                 print("Remaining layers: ")
-                print(len(self.query_encoder.encoder.layer))
             # Deleting the last index
             # del(self.query_encoder.encoder.layer[0])
             self.query_encoder.config.num_hidden_layers=len(self.query_encoder.encoder.layer)
+        print("QUERY ENCODER ARCHITECTURE")
+        print(self.query_encoder)
+        print(self.query_encoder.config)
         self.args.model_type = model_type
         self.args.model_name = model_name
 
