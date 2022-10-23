@@ -1,6 +1,7 @@
 from asyncio.log import logger
 import string
 from turtle import title
+from xmlrpc.client import boolean
 import pandas as pd
 import csv
 import logging
@@ -25,6 +26,8 @@ class ExtendedTransformer(BertPreTrainedModel):
 # Some parameters to train withput changing the script everytime
 parser = argparse.ArgumentParser()
 parser.add_argument("--query_model", help="A valid hugging face BERT based model.", type=str, default="bert-base-uncased")
+parser.add_argument("--ablation", help="To perform ablation experiment on the query encoder. Changes the output-dir based on the layers", type=bool, default=False)
+parser.add_argument("--query_layers", help="To perform ablation. Remove layers in query encoder. Default is 12", type=int, default=12)
 args = parser.parse_args()
 
 
@@ -69,9 +72,14 @@ model_args.save_model_every_epoch = False
 model_args.save_eval_checkpoints = False
 model_args.save_steps = -1
 model_args.save_best_model = True
+
 # Local change to test the metric, will be removed
 model_args.best_model_dir = f"output/{question_name}_new/best_model"
 model_args.output_dir = f"output/{question_name}_new"
+if args.ablation:
+    logging.info(f"Performing Ablation experiment with Query layer = {args.query_layers}")
+    model_args.best_model_dir = f"output/{question_name}_{args.query_layers}_new/best_model"
+    model_args.output_dir = f"output/{question_name}_{args.query_layers}_new"
 # We dont want to accidentally remove an already run model, so keeping it as False which should help adding a new output dir name
 model_args.overwrite_output_dir = True
 if args.query_model != "bert-base-uncased" or args.query_model != "distilbert-base-uncased":
@@ -99,4 +107,4 @@ model = RetrievalModel(
 )
 
 # Including the metric that is needed, for now adding ndcg
-model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}_new", ndcg=calculate_ndcg, recall_100=calculate_recall_100)
+model.train_model(train_data, eval_data=eval_data, output_dir = f"output/{question_name}_{args.query_layers}" if args.ablation else f"output/{question_name}_new" , ndcg=calculate_ndcg, recall_100=calculate_recall_100)

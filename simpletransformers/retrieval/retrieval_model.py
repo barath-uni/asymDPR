@@ -109,6 +109,7 @@ class RetrievalModel:
         use_cuda=True,
         cuda_device=-1,
         query_static_embeddings=False,
+        query_num_layers=12,
         **kwargs,
     ):
         """
@@ -250,8 +251,8 @@ class RetrievalModel:
             layer_list = self.query_encoder.encoder.layer
             print("LAYER LIST")
             print(layer_list)
-            # Remove all the 12 layers for BERT-base-uncased
-            for layer_idx in range(12):
+            # Remove all the 12 layers for BERT-base-uncased (Keeping this as the default, but for ablation study trying this out)
+            for layer_idx in range(query_num_layers):
                 if layer_idx < 0:
                     print ("Only positive indices allowed")
                     os.sys.exit(1)
