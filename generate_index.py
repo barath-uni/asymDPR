@@ -34,6 +34,10 @@ results, *_ = model.eval_model(
     eval_data,
     top_k_values=[1, 2, 3, 5, 10, 20, 100], ndcg=calculate_ndcg)
 logging.info(results)
+
 # Testing retrieval quality
+import time
+start_time=time.time()
 docs, *_ = model.predict(["What is precision and recall?"])
-logging.info(docs[0])
+logging.info(docs)
+logging.info(f"It took {time.time()-start_time} ms to predict 1 query")
