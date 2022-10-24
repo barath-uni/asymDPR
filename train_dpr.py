@@ -78,21 +78,21 @@ if args.ablation:
     model_args.output_dir = f"output/{question_name}_{args.query_layers}_new"
 # We dont want to accidentally remove an already run model, so keeping it as False which should help adding a new output dir name
 model_args.overwrite_output_dir = True
-if args.query_model != "bert-base-uncased" or args.query_model != "distilbert-base-uncased":
-    if not os.path.exists("output/{question_name}_ExtendedModel"):
-        config = AutoConfig.from_pretrained(question_name)
-        # Have to manually store the tokenizer so simpletransformers can pick this up
-        tokenizer = AutoTokenizer.from_pretrained(question_name)
-        new_model = ExtendedTransformer(config, question_name)
-        logging.info(new_model.config.to_dict())
-        new_model.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
-        tokenizer.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
-        # Additionally have to change the config.name_or_path variable
-        # config.name_or_path = f"output/{question_name}_ExtendedModel"
-        # config.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
-        logging.info(question_name)
-    # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
-    question_name = f"output/{question_name}_ExtendedModel"
+# if args.query_model != "bert-base-uncased" or args.query_model != "distilbert-base-uncased":
+#     if not os.path.exists("output/{question_name}_ExtendedModel"):
+#         config = AutoConfig.from_pretrained(question_name)
+#         # Have to manually store the tokenizer so simpletransformers can pick this up
+#         tokenizer = AutoTokenizer.from_pretrained(question_name)
+#         new_model = ExtendedTransformer(config, question_name)
+#         logging.info(new_model.config.to_dict())
+#         new_model.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
+#         tokenizer.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
+#         # Additionally have to change the config.name_or_path variable
+#         # config.name_or_path = f"output/{question_name}_ExtendedModel"
+#         # config.save_pretrained(save_directory=f"output/{question_name}_ExtendedModel")
+#         logging.info(question_name)
+#     # Adds an MLP to convert the projection dimension to match the bert-base-uncased dimension
+    # question_name = f"output/{question_name}_ExtendedModel"
 logging.info(f"Loading the model from {question_name}")
 model = RetrievalModel(
     model_type=model_type,
