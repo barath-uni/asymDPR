@@ -107,9 +107,10 @@ class BertPooler(torch.nn.Module):
         # to the first token.
         try:
             hidden_states = hidden_states.last_hidden_state
+            first_token_tensor = hidden_states[:, 0]
         except:
             logging.info("No hidden states variable present. Continue with the hidden_states as a tensor")
-        first_token_tensor = hidden_states[:, 0]
+            first_token_tensor = hidden_states
         pooled_output = self.dense(first_token_tensor)
         pooled_output = self.activation(pooled_output)
         return pooled_output
