@@ -95,11 +95,11 @@ class IncreaseEmbedding(torch.nn.Module):
         pooled_output = self.activation(pooled_output)
         return pooled_output
 
-# Manually adding the BERTPooler layer if there is no pooled_output present
+# Manually adding the BERTPooler layer if there is no pooled_output present and changing the size of the dense layer to match the dimension
 class BertPooler(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, input_dim, output_dim):
         super().__init__()
-        self.dense = torch.nn.Linear(768, 768, device=torch.device("cuda"))
+        self.dense = torch.nn.Linear(input_dim, output_dim, device=torch.device("cuda"))
         self.activation = torch.nn.Tanh()
 
     def forward(self, hidden_states):
@@ -1694,18 +1694,27 @@ class RetrievalModel:
     ):
         context_outputs = context_model(**context_inputs).pooler_output
         logging.info("Context dimension")
-        logging.info(context_outputs.size())
-        sys.exit(1)
+        logging.info(context_outputs.size()[1])
         query_res = query_model(**query_inputs)
+        # Extend the model if the size don't match
+        if query_res.size()[1] != context_outputs.size()[1]:
+            logging.info("Context and Query encoder size does not match")
+            logging.info(f"{query_res.size()[1]} != {context_outputs.size()[1]}")
+            linear_embedding = BertPooler(query_res.size()[1], context_outputs.size()[1])
+            query_outputs = linear_embedding(query_res)
+        
+        # Do the same if there is no pooler_output layer present
         try:
             query_outputs = query_res.pooler_output
         except Exception as e:
             if 'pooler_output' in str(e):
-                pooler_layer = BertPooler()
+                pooler_layer = BertPooler(query_res.size()[1], context_outputs.size()[1])
                 query_outputs = pooler_layer(query_res)
+            else:
+                # Rethrow to see what the problem is
+                raise
         context_outputs = torch.nn.functional.dropout(context_outputs, p=0.1)
         query_outputs = torch.nn.functional.dropout(query_outputs, p=0.1)
-
         similarity_score = torch.matmul(query_outputs, context_outputs.t())
         softmax_score = torch.nn.functional.log_softmax(similarity_score, dim=-1)
 
