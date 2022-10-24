@@ -1695,17 +1695,16 @@ class RetrievalModel:
         context_outputs = context_model(**context_inputs).pooler_output
         logging.info("Context dimension")
         logging.info(context_outputs.size()[1])
-        query_res = query_model(**query_inputs)
-        # Extend the model if the size don't match
-        if query_res.size()[1] != context_outputs.size()[1]:
-            logging.info("Context and Query encoder size does not match")
-            logging.info(f"{query_res.size()[1]} != {context_outputs.size()[1]}")
-            linear_embedding = BertPooler(query_res.size()[1], context_outputs.size()[1])
-            query_outputs = linear_embedding(query_res)
-        
+        query_res = query_model(**query_inputs)        
         # Do the same if there is no pooler_output layer present
         try:
             query_outputs = query_res.pooler_output
+            # Extend the model if the size don't match
+            if query_outputs.size()[1] != context_outputs.size()[1]:
+                logging.info("Context and Query encoder size does not match")
+                logging.info(f"{query_outputs.size()[1]} != {context_outputs.size()[1]}")
+                linear_embedding = BertPooler(query_outputs.size()[1], context_outputs.size()[1])
+                query_outputs = linear_embedding(query_outputs)
         except Exception as e:
             if 'pooler_output' in str(e):
                 pooler_layer = BertPooler(query_res.size()[1], context_outputs.size()[1])
