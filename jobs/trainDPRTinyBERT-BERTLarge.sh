@@ -16,4 +16,4 @@ module load Anaconda3/2021.05
 cd $HOME/asymdpr/asymDPR
 eval "$(conda shell.bash hook)"
 conda activate asymdpr
-python3 train_dpr.py --query_model huawei-noah/TinyBERT_General_4L_312D --passage_model bert-large-uncased
+python3 train_dpr.py --query_model huawei-noah/TinyBERT_General_4L_312D --passage_model bert-large-uncased --batch_size 10

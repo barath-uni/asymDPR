@@ -23,6 +23,7 @@ parser.add_argument("--query_model", help="A valid hugging face BERT based model
 parser.add_argument("--ablation", help="To perform ablation experiment on the query encoder. Changes the output-dir based on the layers", type=bool, default=False)
 parser.add_argument("--query_layers", help="To perform ablation. Remove layers in query encoder. Default is 12", type=int, default=12)
 parser.add_argument("--passage_model", help="A valid hugging face BERT based model.", type=str, default="bert-base-uncased")
+parser.add_argument("--batch_size", help="Control the batch size for the DPR to train.", type=int, default=40)
 args = parser.parse_args()
 
 
@@ -50,7 +51,7 @@ model_args = RetrievalArgs()
 
 # Training parameters
 model_args.num_train_epochs = 40
-model_args.train_batch_size = 40
+model_args.train_batch_size = args.batch_size
 model_args.learning_rate = 1e-5
 model_args.max_seq_length = 256
 
