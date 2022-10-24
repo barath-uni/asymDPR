@@ -7,7 +7,7 @@
 #SBATCH --cpus-per-task=3
 #SBATCH --time=20:00:00
 #SBATCH --mem=32000M
-#SBATCH --output=trainDPRBaseline.out
+#SBATCH --output=trainTinyBERTBERTLarge.out
 
 module purge
 module load 2021
