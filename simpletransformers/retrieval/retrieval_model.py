@@ -105,7 +105,10 @@ class BertPooler(torch.nn.Module):
     def forward(self, hidden_states):
         # We "pool" the model by simply taking the hidden state corresponding
         # to the first token.
-        hidden_states = hidden_states.last_hidden_state
+        try:
+            hidden_states = hidden_states.last_hidden_state
+        except:
+            logging.info("No hidden states variable present. Continue with the hidden_states as a tensor")
         first_token_tensor = hidden_states[:, 0]
         pooled_output = self.dense(first_token_tensor)
         pooled_output = self.activation(pooled_output)
