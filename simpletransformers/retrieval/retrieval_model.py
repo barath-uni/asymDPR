@@ -3,6 +3,7 @@ import logging
 import math
 import os
 import random
+import sys
 import warnings
 import string
 from dataclasses import asdict
@@ -79,6 +80,21 @@ MODEL_CLASSES = {
         AutoTokenizer,
     ),
 }
+
+# Add a linear layer to convert the size of the embedding dim to support the size
+class IncreaseEmbedding(torch.nn.Module):
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+        self.dense = torch.nn.Linear(input_dim, output_dim, device=torch.device("cuda"))
+        self.activation = torch.nn.Tanh()
+
+    def forward(self, hidden_states):
+        hidden_states = hidden_states.last_hidden_state
+        first_token_tensor = hidden_states[:, 0]
+        pooled_output = self.dense(first_token_tensor)
+        pooled_output = self.activation(pooled_output)
+        return pooled_output
+
 # Manually adding the BERTPooler layer if there is no pooled_output present
 class BertPooler(torch.nn.Module):
     def __init__(self):
@@ -1677,6 +1693,9 @@ class RetrievalModel:
         criterion,
     ):
         context_outputs = context_model(**context_inputs).pooler_output
+        logging.info("Context dimension")
+        logging.info(context_outputs.size())
+        sys.exit(1)
         query_res = query_model(**query_inputs)
         try:
             query_outputs = query_res.pooler_output

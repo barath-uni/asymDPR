@@ -22,6 +22,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--query_model", help="A valid hugging face BERT based model.", type=str, default="bert-base-uncased")
 parser.add_argument("--ablation", help="To perform ablation experiment on the query encoder. Changes the output-dir based on the layers", type=bool, default=False)
 parser.add_argument("--query_layers", help="To perform ablation. Remove layers in query encoder. Default is 12", type=int, default=12)
+parser.add_argument("--passage_model", help="A valid hugging face BERT based model.", type=str, default="bert-base-uncased")
 args = parser.parse_args()
 
 
@@ -41,7 +42,7 @@ logging.info(f"Starting to train with {args.query_model}")
 
 model_type = "custom"
 model_name = None
-context_name = "bert-base-uncased"
+context_name = args.passage_model
 # Using a different encoder to train and get the performance
 question_name = args.query_model
 
