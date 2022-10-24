@@ -467,12 +467,16 @@ def get_evaluation_passage_dataset(
         passage_dataset.add_faiss_index("embeddings", custom_index=index)
         passage_index = DPRIndex(passage_dataset, context_config.hidden_size)
         logger.info("Adding FAISS index to evaluation passages completed.")
+        logger.info("SIZE OF THE FAISS INDEX")
+        logger.info(context_config.hidden_size)
         if args.save_passage_dataset:
             output_dataset_directory = os.path.join(args.output_dir, "passage_dataset")
             os.makedirs(output_dataset_directory, exist_ok=True)
             faiss_save_path = os.path.join(
                 output_dataset_directory, "hf_dataset_index.faiss"
             )
+            logging.info("FAISS SAVE PATH")
+            logging.info(faiss_save_path)
             passage_dataset.save_faiss_index("embeddings", faiss_save_path)
     else:
         logger.info(f"Loading passage dataset from {passage_dataset}")

@@ -19,3 +19,4 @@ dependencies:
     - pillow==8.0.1
     - simpletransformers==0.63.9
     - tensorboardX==2.5.1
+    - diffusers==0.6.0 
